@@ -8,10 +8,14 @@ There is a lot of noise in the day to day price of a stock, and this tends to ob
 **Goals**
  - Identify stocks that are about to make a large jump
  - Buy said stock as a fixed initial percent of the portfolio, then sell two business days later
- - Outperform VOOG index fund (as control)
+ - Outperform VOOG ETF
  
  **Exploration**
  - How does a model trained over a large period of time compare to one regularly retrained on recent data
  - What features help identify signal from noise (assuming such classifications can be assigned to the trends)
  
+ **Results**
  
+ ![](/Images/TestPredictorPlot.png)
+ 
+ Trained on data from Jan 20129- Jan 2020, then tested on data from Jan 2020 - Sept 2020
