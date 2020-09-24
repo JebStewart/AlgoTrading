@@ -17,9 +17,9 @@ from StockBotLogger import Log
 
 class ATRaC:
     def __init__(self):
-        self.login_location = r''
-        self.un = input('USERNAME:') 
-        self.pw = input('PASSWORD:')
+        self.login_df= 
+        self.un = self.login_df['Username'].iloc[0]
+        self.pw = self.login_df['Password'].iloc[0]
         self.my_portfolio = Portfolio()
         self.mt = ModelTools()
         self.L = Log()
@@ -68,12 +68,14 @@ class ATRaC:
         self.my_portfolio = chirp.build_holdings()
     
     def stocks_to_sell():
-        #TODO fix this with new portfolio date tracking system
+        port = self.my_portfolio.portfolio_contents()
         today = date.today()
         sell_me = []
-        for i in list(self.mini_port.keys()):
-            if self.mini_port[i]+timedelta(days=2)<today:
-                sell_me.append(i)
+        if today.weekday() not in [5, 6]:
+            for i in list(port['Symbol'].unique()):
+                bought_date = port[port['Symbol'] == i]['Date'].iloc[0]
+                if bought_date+timedelta(days=2)<today:
+                    sell_me.append(i)
         return sell_me
 
 

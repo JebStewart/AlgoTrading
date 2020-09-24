@@ -6,10 +6,6 @@ class Portfolio:
         self.location = r'/home/jeb/TraderBotLogs/my_portfolio.pkl'
         self.portfolio = None
 
-
-    def get_available_funds(self):
-        return 0
-
     def add_to_portfolio(self, symbol):
         self.load_portfolio()
         if symbol not in list(self.portfolio['Symbol']):
@@ -30,7 +26,7 @@ class Portfolio:
     def load_portfolio(self):
         self.portfolio = pd.read_pickle(self.location)
 
-    def reset_portfolio():
+    def reset_portfolio(self):
         df = pd.DataFrame()
         df['Symbol'] = []
         df['Date_Bought'] = []
@@ -43,8 +39,4 @@ class Portfolio:
 
 if __name__ == '__main__':
     p = Portfolio()
-    p.add_to_portfolio('TSLA')
-    p.add_to_portfolio('TSLA')
-    print(p.portfolio_contents())
-    p.remove_from_portfolio('TSLA')
-    print(p.portfolio_contents())
+    p.reset_portfolio()
