@@ -21,13 +21,17 @@ class ModelTools:
         if result.empty or _date.weekday() in [5, 6]:
             print('No info for this day.')
             return result
+        result = result.iloc[-1]
         running_result = pd.DataFrame(tckr.history(start=_date-timedelta(days=5), end = _date))
         running_result['Date'] = running_result.index
         running_result['Date'] = running_result['Date'].dt.date
         model_inputs = pd.DataFrame()
-        model_inputs['Date'] = result.index
-        model_inputs['Date'] = model_inputs['Date'].dt.date
-        model_inputs['Volume'] = int(result['Volume'])
+        model_inputs['Date'] = _date
+        try:
+            model_inputs['Volume'] = int(result['Volume'])
+        except:
+            print('NaNs in inputs')
+            return pd.DataFrame()
         model_inputs['Dividends'] = int(result['Dividends'])
         model_inputs['Stock Splits'] = int(result['Stock Splits'])
         model_inputs['Pct_Change'] = self.FE.daily_pct_change(result)
@@ -39,7 +43,6 @@ class ModelTools:
         """Returns True for whether or not a stock should be bought."""
         inputs = self.get_model_inputs(symbol, _date)
         if not inputs.empty:
-            print(inputs)
             inputs.drop('Date', inplace=True, axis=1)
             results = self.my_model.predict(inputs)
             if results == 1:
