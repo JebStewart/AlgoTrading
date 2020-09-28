@@ -18,25 +18,25 @@ class ModelTools:
             _date = _date - timedelta(days=2)
         tckr = yf.Ticker(symbol)
         result = pd.DataFrame(tckr.history(start=_date-timedelta(days=1), end = _date))
-        if result.empty or _date.weekday() in [5, 6]:
+        if result.empty:
             print('No info for this day.')
-            return result
+            return pd.DataFrame()
         result = result.iloc[-1]
         running_result = pd.DataFrame(tckr.history(start=_date-timedelta(days=5), end = _date))
         running_result['Date'] = running_result.index
         running_result['Date'] = running_result['Date'].dt.date
         model_inputs = pd.DataFrame()
-        model_inputs['Date'] = _date
+        model_inputs['Date'] = [_date]
         try:
-            model_inputs['Volume'] = int(result['Volume'])
+            model_inputs['Volume'] = [int(result['Volume'])]
         except:
             print('NaNs in inputs')
             return pd.DataFrame()
-        model_inputs['Dividends'] = int(result['Dividends'])
-        model_inputs['Stock Splits'] = int(result['Stock Splits'])
-        model_inputs['Pct_Change'] = self.FE.daily_pct_change(result)
-        model_inputs['Three_Day_Movement'] =self.FE.prior_trend(running_result, _date, 3)
-        model_inputs['Five_Day_Movement'] =self.FE.prior_trend(running_result, _date, 5)
+        model_inputs['Dividends'] = [int(result['Dividends'])]
+        model_inputs['Stock Splits'] = [int(result['Stock Splits'])]
+        model_inputs['Pct_Change'] = [self.FE.daily_pct_change(result)]
+        model_inputs['Three_Day_Movement'] =[self.FE.prior_trend(running_result, _date, 3)]
+        model_inputs['Five_Day_Movement'] =[self.FE.prior_trend(running_result, _date, 5)]
         return model_inputs
     
     def make_prediction(self, symbol, _date):
@@ -70,4 +70,5 @@ class FeatureEngineerer:
 if __name__ == '__main__':
     #Testing section
     mt = ModelTools()
-    print(mt.make_prediction('TSLA', date(2020, 5, 17)))
+    print(mt.get_model_inputs('TSLA', date(2020, 9, 28)))
+    #print(mt.make_prediction('TSLA', date(2020, 9, 28)))
