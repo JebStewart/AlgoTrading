@@ -18,4 +18,4 @@ There is a lot of noise in the day to day price of a stock, and this tends to ob
  
  ![](/Images/TestPredictorPlot.png)
  
- Trained on data from Jan 20129- Jan 2020, then tested on data from Jan 2020 - Sept 2020
+ Trained on data from Jan 2019- Jan 2020, then tested on data from Jan 2020 - Sept 2020
