@@ -17,9 +17,10 @@ from StockBotLogger import Log
 
 class ATRaC:
     def __init__(self):
-        self.login_df= 
+        self.login_df= pd.read_pickle()
         self.un = self.login_df['Username'].iloc[0]
         self.pw = self.login_df['Password'].iloc[0]
+        self._login()
         self.my_portfolio = Portfolio()
         self.mt = ModelTools()
         self.L = Log()
@@ -45,7 +46,7 @@ class ATRaC:
             return buying_power*.9
 
 
-    def buy_stock(self, symbol, value):
+    def buy_stock(self, symbol):
         value = self.amount_to_buy()
         if value==0:
             self.L.add_line(f'Not enough money to buy {symbol}, purchase not made.')
@@ -67,7 +68,7 @@ class ATRaC:
     def update_portfolio(self):
         self.my_portfolio = chirp.build_holdings()
     
-    def stocks_to_sell():
+    def stocks_to_sell(self):
         port = self.my_portfolio.portfolio_contents()
         today = date.today()
         sell_me = []
@@ -83,6 +84,7 @@ class ATRaC:
 if __name__ == '__main__':
     #Get tools set up
     A = ATRaC()
+    N = Notifier()
     today = date.today()
     all_symbols = ['ACB', 'F', 'GE', 'DIS', 'AAL', 'GPRO', 'DAL', 'MSFT', 'CCL', 'AAPL', 'FIT', 'SNAP', 'PLUG', 
                    'BAC', 'BA', 'NCLH', 'INO', 'UAL', 'UBER', 'CGC', 'TSLA', 'AMD', 'CRON', 'RCL', 'TWTR', 
@@ -102,4 +104,7 @@ if __name__ == '__main__':
     for symbol in sell_list:
         A.sell_stock(symbol)
     for symbol in stocks_to_buy:
-        A.buy_stock(symbol, amount)
+        A.buy_stock(symbol)
+    sell_msg = ', '.join(sell_list)
+    buy_msg = ', '.join(stocks_to_buy)
+    N.notify(f'Good morning Jeb, I have successfully run my prediction algorithm for today. \n Stocks bought: \n {buy_msg} \n Stocks sold: \n {sell_msg}')
