@@ -74,7 +74,7 @@ class ATRaC:
         sell_me = []
         if today.weekday() not in [5, 6]:
             for i in list(port['Symbol'].unique()):
-                bought_date = port[port['Symbol'] == i]['Date'].iloc[0]
+                bought_date = port[port['Symbol'] == i]['Date_Bought'].iloc[0]
                 if bought_date+timedelta(days=2)<today:
                     sell_me.append(i)
         return sell_me
